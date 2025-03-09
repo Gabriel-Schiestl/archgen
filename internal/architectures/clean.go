@@ -1,7 +1,7 @@
 package architectures
 
-func Clean(args ...string) {
-	dirs := getCleanDirs()
+func Clean(lang string, args ...string) {
+	dirs := getCleanDirs(lang)
 
 	createDirs(dirs, args...)
 }
@@ -16,7 +16,7 @@ type cleanDirs struct {
 	children []*cleanSubDirs
 }
 
-func getCleanDirs() *cleanDirs {
+func getCleanDirs(lang string) *cleanDirs {
 	domain := &cleanSubDirs{
 		parent:   "domain",
 		children: []string{"model", "exception"},
@@ -37,8 +37,19 @@ func getCleanDirs() *cleanDirs {
 		children: []string{},
 	}
 
+	mainDir := ""
+
+	switch lang {
+	case "go":
+		mainDir = "internal"
+	case "node", "python":
+		mainDir = "src"
+	case "java":
+		mainDir = "src/main/java/com/empresa/app"
+	}
+
 	cleanDirectories := &cleanDirs{
-		mainDir:  "internal",
+		mainDir:  mainDir,
 		children: []*cleanSubDirs{domain, application, interfaces, config},
 	}
 

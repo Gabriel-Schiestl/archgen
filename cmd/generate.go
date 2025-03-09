@@ -8,8 +8,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var arch string
-var dir string
+var (
+	arch string
+	dir string
+	lang string = "go"
+)
 
 var generateCmd = &cobra.Command{
 	Use: "generate <arch>",
@@ -26,7 +29,7 @@ var generateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		switch arch {
 		case "clean":
-			architectures.Clean(dir)
+			architectures.Clean(lang, dir)
 		case "mvc":
 			architectures.MVC(dir)
 		default:
@@ -40,4 +43,5 @@ func init() {
 	rootCmd.AddCommand(generateCmd)
 
 	rootCmd.PersistentFlags().StringVarP(&dir, "dir", "d", "", "Defines the dir to create the structure")
+	rootCmd.PersistentFlags().StringVarP(&lang, "lang", "l", "go", "The language/framework to be created")
 }
