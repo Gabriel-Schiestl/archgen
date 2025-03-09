@@ -9,6 +9,7 @@ import (
 )
 
 var arch string
+var dir string
 
 var generateCmd = &cobra.Command{
 	Use: "generate <arch>",
@@ -25,9 +26,9 @@ var generateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		switch arch {
 		case "clean":
-			architectures.Clean()
+			architectures.Clean(dir)
 		case "mvc":
-			architectures.MVC()
+			architectures.MVC(dir)
 		default:
 			fmt.Println("Arch does not satisfies:\n\nclean\nmvc")
 			os.Exit(1)
@@ -37,4 +38,6 @@ var generateCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(generateCmd)
+
+	rootCmd.PersistentFlags().StringVarP(&dir, "dir", "d", "", "Defines the dir to create the structure")
 }
