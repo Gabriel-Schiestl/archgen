@@ -31,7 +31,7 @@ var generateCmd = &cobra.Command{
 		case "clean":
 			architectures.Clean(lang, dir)
 		case "mvc":
-			architectures.MVC(dir)
+			architectures.MVC(lang, dir)
 		default:
 			fmt.Println("Arch does not satisfies:\n\nclean\nmvc")
 			os.Exit(1)

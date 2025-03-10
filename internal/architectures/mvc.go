@@ -1,9 +1,9 @@
 package architectures
 
-func MVC(args ...string) {
+func MVC(lang, dir string) {
 	dirs := getMVCDirs()
 
-	createDirs(dirs, args...)
+	createDirs(dirs, dir, lang)
 }
 
 func getMVCDirs() *cleanDirs {

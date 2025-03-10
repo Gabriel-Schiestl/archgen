@@ -1,9 +1,9 @@
 package architectures
 
-func Clean(lang string, args ...string) {
+func Clean(lang, dir string) {
 	dirs := getCleanDirs(lang)
 
-	createDirs(dirs, args...)
+	createDirs(dirs, dir, lang)
 }
 
 type cleanSubDirs struct {

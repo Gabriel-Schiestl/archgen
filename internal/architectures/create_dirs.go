@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 )
 
-func createDirs(dirs *cleanDirs, args ...string) {
+func createDirs(dirs *cleanDirs, dir, lang string) {
 	var baseDir string
 
-	if len(args) > 0 && args[0] != "" {
-		baseDir = args[0]
+	if dir != "" {
+		baseDir = dir
 	} else {
 		baseDir = ""
 	}
@@ -22,14 +22,33 @@ func createDirs(dirs *cleanDirs, args ...string) {
 	}
 
 	for _, d := range dirs.children {
-		if err := os.MkdirAll(filepath.Join(mainDirPath, d.parent), os.ModePerm); err != nil {
+		actualDir := filepath.Join(mainDirPath, d.parent)
+
+		if err := os.MkdirAll(actualDir, os.ModePerm); err != nil {
 			log.Fatal(err.Error())
 		}
 
+		if lang == "python" {
+			createFileIfNotExists(filepath.Join(actualDir, "__init__.py"))
+		}
+
 		for _, sb := range d.children {
-			if err := os.MkdirAll(filepath.Join(mainDirPath, d.parent, sb), os.ModePerm); err != nil {
+			if err := os.MkdirAll(filepath.Join(actualDir, sb), os.ModePerm); err != nil {
 				log.Fatal(err.Error())
+			}
+
+			if lang == "python" {
+				createFileIfNotExists(filepath.Join(actualDir, sb, "__init__.py"))
 			}
 		}
 	}
+}
+
+func createFileIfNotExists(path string) {
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_EXCL, 0644)
+	if err != nil && !os.IsExist(err) {
+		log.Fatal(err.Error())
+	}
+
+	file.Close()
 }
